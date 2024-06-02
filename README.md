@@ -23,3 +23,12 @@ Recompression involves re-encoding the audio signal using different codecs or co
 ## Low Pass Filtering
 
 Low pass filtering removes high-frequency components from an audio signal, which can effectively disguise high-frequency artifacts common in synthetic audios. By smoothing out the audio, low pass filtering can make synthetic signals appear more natural and less detectable. This technique targets the high-frequency inconsistencies often present in synthetic audios, thereby evading detection algorithms that focus on these anomalies.
+
+
+# Steps to add laundering attacks to synthetic audio
+
+1) Give your audio directory path to the "audio_path" variable in config.py
+2) ```bash
+   python main.py
+3)check the output folder you will find the laundered audios with the respective suffix
+

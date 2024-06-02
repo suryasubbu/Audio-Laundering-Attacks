@@ -60,10 +60,12 @@ def out_one(audio_path,reverb = False, noises =False, recomp = False, fil = Fals
             resampled_audio = resampling(audio_path,res)
             sf.write(os.path.join(out_dir, f'{file_name}_resample_{res}.wav'),resampled_audio, res,subtype='PCM_16')
 
-# if __name__ == '__main__':
-#     for a in config.audio_path:   
-#         print(a)
+if __name__ == '__main__':
+    if not os.path.exists(config.out_dir):
+        os.makedirs(config.out_dir)
+    for a in config.audio_path:   
+        print(a)
         
-#         # out_one(a,reverb = config.reverb, noises =config.noises, recomp = config.recomp, fil = config.fil, resample = config.resample )
-#         #
-#         out_one(a, noises = config.noises)
+        out_one(a,reverb = config.reverb, noises =config.noises, recomp = config.recomp, fil = config.fil, resample = config.resample )
+        #
+        # out_one(a, noises = config.noises) #out_one("/home/suryasss/Laundering Pipeline/LA_T_1006715_lpf_7000.wav",reverb = False, noises =False, recomp = False, fil = True, resample = False  )

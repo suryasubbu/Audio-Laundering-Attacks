@@ -6,12 +6,12 @@ def get_files(directory):
     # Walk through the directory
     for root, _, files in os.walk(directory):
         for file in files:
-            if file.endswith('.flac') or file.endswith('.wav'):
+            if file.endswith('.flac') or file.endswith('.wav') or file.endswith('.mp3'):
                 flac_files.append(os.path.join(root, file))
     
     return flac_files
 
-audio_path = get_files("/home/suryasss/Transcription/pipeline/jo_chunks")
+audio_path = get_files("audio/path/here.wav")
 out_dir = "outputs/"
 
 #reverb parameters

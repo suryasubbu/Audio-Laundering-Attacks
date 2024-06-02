@@ -1,5 +1,7 @@
 # Laundering Attacks for Synthetic Audios
 This repository contains all the laundering attacks done code for the paper titled "Is Audio Spoof Detection Robust to Laundering Attacks?". 
+
+Code Authors: Surya Subramani, Hashim Ali, Raksha Varahamurthy, Shefali Gokrn
 ## Introduction
 
 Laundering attacks on synthetic audios pose significant challenges in the realm of audio forensics and security. These attacks manipulate audio signals to evade detection systems, rendering synthetic audios nearly indistinguishable from authentic recordings. Key laundering techniques include reverberation, noise addition, resampling, recompression, and low pass filtering. Understanding these methods is crucial for developing robust detection mechanisms.

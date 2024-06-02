@@ -1,5 +1,5 @@
 # Laundering Attacks for Synthetic Audios
-
+This repository contains all the laundering attacks done code for the paper titled "Is Audio Spoof Detection Robust to Laundering Attacks?". 
 ## Introduction
 
 Laundering attacks on synthetic audios pose significant challenges in the realm of audio forensics and security. These attacks manipulate audio signals to evade detection systems, rendering synthetic audios nearly indistinguishable from authentic recordings. Key laundering techniques include reverberation, noise addition, resampling, recompression, and low pass filtering. Understanding these methods is crucial for developing robust detection mechanisms.
@@ -24,6 +24,9 @@ Recompression involves re-encoding the audio signal using different codecs or co
 
 Low pass filtering removes high-frequency components from an audio signal, which can effectively disguise high-frequency artifacts common in synthetic audios. By smoothing out the audio, low pass filtering can make synthetic signals appear more natural and less detectable. This technique targets the high-frequency inconsistencies often present in synthetic audios, thereby evading detection algorithms that focus on these anomalies.
 
+![Block Diagram](https://github.com/suryasubbu/Audio-Laundering-Attacks/assets/78839425/6e356e18-536a-43a0-a15d-e6959df9f2b3)
+
+
 
 # Steps to add laundering attacks to synthetic audio
 
@@ -32,3 +35,5 @@ Low pass filtering removes high-frequency components from an audio signal, which
    python main.py
 3)check the output folder you will find the laundered audios with the respective suffix
 
+
+This repo is done for the research work submitted to 

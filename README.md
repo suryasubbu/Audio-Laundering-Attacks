@@ -28,5 +28,3 @@ Format = "attack_param"
    python main.py audio_laundering "audio_path" "attack_param"
 3)check the output folder you will find the laundered audios with the respective suffix
 
-
-This repo is done for the research work submitted to 

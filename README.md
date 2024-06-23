@@ -21,7 +21,7 @@ Format = "attack_param"
 1) resample_22050 or resample_44100 or resample_8000 or resample_11025
 ## recompression
 1) recompression_128k or recompression_64k or recompression_196k or recompression_64k or recompression_16k or recompression_256k or recompression_320k
-
+# Steps to initiate
 1) ```bash
    pip install -r requirements.txt 
 2) ```bash

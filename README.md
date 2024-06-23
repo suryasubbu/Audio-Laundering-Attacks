@@ -23,6 +23,8 @@ Format = "attack_param"
 1) recompression_128k or recompression_64k or recompression_196k or recompression_64k or recompression_16k or recompression_256k or recompression_320k
 # Steps to initiate
 1) ```bash
+   git clone https://github.com/suryasubbu/Audio-Laundering-Attacks
+   cd Audio-Laundering-Attacks/
    pip install -r requirements.txt 
 2) ```bash
    python main.py audio_laundering "audio_path" "attack_param"

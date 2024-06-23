@@ -1,0 +1,7 @@
+pandas
+numpy
+librosa
+soundfile
+pyroomacoustics
+audiomentations
+scipy

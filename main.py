@@ -19,8 +19,9 @@ def blockPrinting(func):
         return value
 
     return func_wrapper
+
 @blockPrinting
-def out_one(audio_path,reverb = False, noises =False, recomp = False, fil = False, resample = False  ):
+def audio_laundering(audio_path,type): #["noise_parameter"]
 
     out_dir = config.out_dir
 
@@ -28,44 +29,80 @@ def out_one(audio_path,reverb = False, noises =False, recomp = False, fil = Fals
     file_name = file_name_with_ext.split(".")[0]
     fil_ext = file_name_with_ext.split(".")[1]
     audio_data, sr = librosa.load(audio_path,sr = None)
+    attack,parameter = str(type).split("_")
+    print("file:",file_name_with_ext," attack:",attack," parameter:", parameter )
 
-    # Reverberation
-    if reverb:
-        for r in reverb:    
-            room_reverb(audio_data, sr,r).to_wav(
-            f"{out_dir}/{file_name.split(".")[0]}_RT_{str(r).split(".")[0]}_{str(r).split(".")[1]}.wav",
+    if attack == "rt":
+        room_reverb(audio_data, sr,float(parameter)).to_wav(
+            f"{out_dir}/{file_name.split(".")[0]}_RT_{str(parameter).split(".")[0]}_{str(parameter).split(".")[1]}.wav",
             norm=True,
             bitdepth=np.int16,
         )
-        
-    # Noise Addition
-    if noises:
-        noises = np.array(noises)
-        for n in noises:
-            for noisy in n:
-                noise = noise_add(f"noises/{noisy[0]}.wav",float(noisy[1]),float(noisy[2]),audio_data,sr)
-                wavf.write(f"{out_dir}/{file_name}_{noisy[0]}_{noisy[1]}.wav", sr, noise)
-
-    if recomp:
-         for rec in recomp:
-            recompression(audio_path, out_dir,out_dir,rec)
-
-    if fil:
+        wav_file = f"{out_dir}/{file_name.split(".")[0]}_RT_{str(parameter).split(".")[0]}_{str(parameter).split(".")[1]}.wav"
+        audio_data, sr = librosa.load( f"{out_dir}/{file_name.split(".")[0]}_RT_{str(parameter).split(".")[0]}_{str(parameter).split(".")[1]}.wav",sr = None)
+    
+    if attack == "babble" or attack == "volvo" or attack == "white" or attack == "cafe" or attack == "street":
+        noise = noise_add(f"noises/{attack}.wav",float(parameter),float(float(parameter)+0.5),audio_data,sr)
+        wavf.write(f"{out_dir}/{file_name}_{attack}_{parameter}.wav", sr, noise)
+        audio_data, sr = librosa.load(f"{out_dir}/{file_name}_{attack}_{parameter}.wav",sr = None)
+        wav_file = f"{out_dir}/{file_name}_{attack}_{parameter}.wav"
+    if attack == "recompression":
+        recompression(audio_path, out_dir,out_dir,parameter)
+        audio_data, sr = librosa.load("{}/{}_{}_{}.wav".format(out_dir,file_name,"recompression",parameter),sr = None)
+        wav_file = "{}/{}_{}_{}.wav".format(out_dir,file_name,"recompression",parameter)
+    if attack == "lpf":
         f = filtering(audio_data,sr)
         sf.write(os.path.join(out_dir, f'{file_name}_lpf_7000.wav'),f, sr,subtype='PCM_16')
+        audio_data, sr = librosa.load(os.path.join(out_dir, f'{file_name}_lpf_7000.wav'),sr = None)
+        wav_file = os.path.join(out_dir, f'{file_name}_lpf_7000.wav')
+    if attack == "resample":
+        resampled_audio = resampling(audio_path,int(parameter))
+        sf.write(os.path.join(out_dir, f'{file_name}_resample_{str(parameter)}.wav'),resampled_audio, int(parameter),subtype='PCM_16')
+        wav_file = os.path.join(out_dir, f'{file_name}_resample_{str(parameter)}.wav')
 
-    if resample:
-         for res in resample:
-              
-            resampled_audio = resampling(audio_path,res)
-            sf.write(os.path.join(out_dir, f'{file_name}_resample_{res}.wav'),resampled_audio, res,subtype='PCM_16')
+    return wav_file
+
+def audio_laundering_cascading(audio_path,type_array): #["noise_parameter"]
+
+    out_dir = config.out_dir
+    out_dir_c = config.out_dir_chunks
+    file_name_with_ext = os.path.basename(audio_path)
+    file_name = file_name_with_ext.split(".")[0]
+    fil_ext = file_name_with_ext.split(".")[1]
+    audio_data, sr = librosa.load(audio_path,sr = None)
+    
+    for type in type_array:
+        attack,parameter = str(type).split("_")
+        if attack == "rt":
+            room_reverb(audio_data, sr,float(parameter)).to_wav(
+                f"{out_dir_c}/{file_name.split(".")[0]}_RT_{str(parameter).split(".")[0]}_{str(parameter).split(".")[1]}.wav",
+                norm=True,
+                bitdepth=np.int16,
+            )
+            wav_file = f"{out_dir_c}/{file_name.split(".")[0]}_RT_{str(parameter).split(".")[0]}_{str(parameter).split(".")[1]}.wav"
+            audio_data, sr = librosa.load( f"{out_dir_c}/{file_name.split(".")[0]}_RT_{str(parameter).split(".")[0]}_{str(parameter).split(".")[1]}.wav",sr = None)
+            
+        if attack == "babble" or attack == "volvo" or attack == "white" or attack == "cafe" or attack == "street":
+            noise = noise_add(f"noises/{attack}.wav",float(parameter),float(float(parameter)+0.5),audio_data,sr)
+            wavf.write(f"{out_dir_c}/{file_name}_{attack}_{parameter}.wav", sr, noise)
+            audio_data, sr = librosa.load(f"{out_dir_c}/{file_name}_{attack}_{parameter}.wav",sr = None)
+            wav_file = f"{out_dir_c}/{file_name}_{attack}_{parameter}.wav"
+        if attack == "recompression":
+            recompression(audio_path, out_dir_c,out_dir_c,parameter)
+            audio_data, sr = librosa.load("{}/{}_{}_{}.wav".format(out_dir_c,file_name,"recompression",parameter),sr = None)
+            wav_file = "{}/{}_{}_{}.wav".format(out_dir_c,file_name,"recompression",parameter)
+        if attack == "lpf":
+            f = filtering(audio_data,sr)
+            sf.write(os.path.join(out_dir_c, f'{file_name}_lpf_7000.wav'),f, sr,subtype='PCM_16')
+            audio_data, sr = librosa.load(os.path.join(out_dir_c, f'{file_name}_lpf_7000.wav'),sr = None)
+            wav_file = os.path.join(out_dir_c, f'{file_name}_lpf_7000.wav')
+        if attack == "resample":
+            resampled_audio = resampling(audio_path,int(parameter))
+            sf.write(os.path.join(out_dir_c, f'{file_name}_resample_{str(parameter)}.wav'),resampled_audio, int(parameter),subtype='PCM_16')
+            audio_data, sr = librosa.load(os.path.join(out_dir_c, f'{file_name}_resample_{str(parameter)}.wav'),sr = None)
+            wav_file = os.path.join(out_dir_c, f'{file_name}_resample_{str(parameter)}.wav')
+    sf.write(os.path.join(out_dir,f'{file_name}_resample_{str(parameter)}.wav'))
+    return wav_file
 
 if __name__ == '__main__':
-    if not os.path.exists(config.out_dir):
-        os.makedirs(config.out_dir)
-    for a in config.audio_path:   
-        print(a)
-        
-        out_one(a,reverb = config.reverb, noises =config.noises, recomp = config.recomp, fil = config.fil, resample = config.resample )
-        #
-        # out_one(a, noises = config.noises) #out_one("/home/suryasss/Laundering Pipeline/LA_T_1006715_lpf_7000.wav",reverb = False, noises =False, recomp = False, fil = True, resample = False  )
+    globals()[sys.argv[1]](sys.argv[2],sys.argv[3])

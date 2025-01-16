@@ -37,8 +37,8 @@ def room_reverb(audio, fs, rt60_tgt):
 def noise_add(noise_path,snr_rangei,snr_rangej,audio_data,sr):
     transform = AddShortNoises(
         sounds_path=noise_path,
-        min_snr_in_db=snr_rangei,
-        max_snr_in_db=snr_rangej,
+        min_snr_db=snr_rangei,
+        max_snr_db=snr_rangej,
         noise_rms="relative_to_whole_input",
         min_time_between_sounds=0.15,
         max_time_between_sounds=0.16,
@@ -79,7 +79,7 @@ def recompression(input_file, output_folder,output_folder2,bit_rate):
     subprocess.run(['ffmpeg', '-i', input_file, '-b:a', bit_rate, c_file])
 
    # Compression (mp3 to wav)
-    dc_file = output_folder2 +"{}_{}_{}.wav".format(file_name.split(".")[0],"recompression",bit_rate)
+    dc_file = output_folder2 +"{}_{}{}.wav".format(file_name.split(".")[0],"recompression",bit_rate)
     subprocess.run(['ffmpeg', '-i',c_file,dc_file])
     os.remove(c_file)
 

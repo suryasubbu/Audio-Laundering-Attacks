@@ -11,8 +11,7 @@ def get_files(directory):
     
     return flac_files
 
-audio_path = get_files("/home/suryasss/j_o_tts/StyleTTS2/temp_audios")
-out_dir = "outputs/"
+out_dir = "/data/ASV19/wav_paired_4/"
 
 #reverb parameters
 

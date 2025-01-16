@@ -264,7 +264,7 @@ if __name__ == '__main__':
     big = pdd.merge(prot, how = "inner", on = "audioname")
     print(big.drop_duplicates().shape)
     att_type = "paired"
-    par_array = np.array(["REC","LPF"])
+    par_array = np.array(["REV","LPF"])
     big.drop_duplicates("audioname",inplace=True)
     print(big.columns,big.shape)
     b = []

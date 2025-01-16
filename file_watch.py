@@ -41,7 +41,7 @@ if __name__ == "__main__":
     print("Monitoring started. Press Ctrl+C to stop.")
     try:
         while True:
-            time.sleep(1)
+            time.sleep(10)
     except KeyboardInterrupt:
         print("Stopping monitoring.")
         observer.stop()

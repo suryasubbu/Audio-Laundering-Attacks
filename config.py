@@ -11,7 +11,7 @@ def get_files(directory):
     
     return flac_files
 
-out_dir = "/data/ASV19/wav_paired_4/"
+out_dir = "/data/ASV19/wav_paired_REV_LPF/"
 
 #reverb parameters
 

@@ -17,7 +17,6 @@ def convert_wav_to_flac(input_folder, output_folder):
 
     # List all .wav files in the input folder
     wav_files = [f for f in os.listdir(input_folder) if f.endswith(".wav")]
-    import pdb; pdb.set_trace()
 
     if not wav_files:
         print(f"No .wav files found in {input_folder}.")
